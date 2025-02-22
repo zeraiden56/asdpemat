@@ -1,4 +1,4 @@
-# ASDPemat
+# ASDPEMAT - Associação dos Servidores da Defensoria Pública do Estado de Mato Grosso
 
 Este é o repositório do site da Associação ASDPemat. O projeto é desenvolvido utilizando React no frontend e Node.js com PostgreSQL no backend.
 
