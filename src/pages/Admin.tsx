@@ -1,207 +1,104 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Login from './Login'; // Corrigir o caminho de importação
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const [token, setToken] = useState(localStorage.getItem('token'));
-    const [news, setNews] = useState<any[]>([]);
-    const [services, setServices] = useState<any[]>([]);
-    const [members, setMembers] = useState<any[]>([]);
-    const [settings, setSettings] = useState<{ id: number; key: string; value: string }[]>([]);
-    const [title, setTitle] = useState('');
-    const [image, setImage] = useState('');
-    const [link, setLink] = useState('');
-    const [serviceName, setServiceName] = useState('');
-    const [serviceDescription, setServiceDescription] = useState('');
-    const [memberName, setMemberName] = useState('');
-    const [memberRole, setMemberRole] = useState('');
-    const [settingKey, setSettingKey] = useState('');
-    const [settingValue, setSettingValue] = useState('');
+    const [activeTab, setActiveTab] = useState('dashboard');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (token) {
-            axios.get('/api/news', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-                setNews(response.data);
-            });
-            axios.get('/api/services', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-                setServices(response.data);
-            });
-            axios.get('/api/members', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-                setMembers(response.data);
-            });
-            axios.get('/api/settings', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-                setSettings(response.data);
-            });
+        if (!token) {
+            navigate('/');
         }
-    }, [token]);
+    }, [token, navigate]);
 
-    const addNews = () => {
-        axios.post('/api/news', { title, image, link }, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-            setNews([...news, response.data]);
-            setTitle('');
-            setImage('');
-            setLink('');
-        });
+    const logout = () => {
+        localStorage.removeItem('token');
+        setToken(null);
+        navigate('/');
     };
-
-    const addService = () => {
-        axios.post('/api/services', { name: serviceName, description: serviceDescription }, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-            setServices([...services, response.data]);
-            setServiceName('');
-            setServiceDescription('');
-        });
-    };
-
-    const addMember = () => {
-        axios.post('/api/members', { name: memberName, role: memberRole }, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-            setMembers([...members, response.data]);
-            setMemberName('');
-            setMemberRole('');
-        });
-    };
-
-    const addSetting = () => {
-        axios.post('/api/settings', { key: settingKey, value: settingValue }, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-            setSettings([...settings, response.data]);
-            setSettingKey('');
-            setSettingValue('');
-        });
-    };
-
-    if (!token) {
-        return <Login setToken={(token: string) => {
-            localStorage.setItem('token', token);
-            setToken(token);
-        }} />;
-    }
 
     return (
-        <div className="p-4">
-            <h2 className="text-3xl font-bold mb-4">Administração</h2>
-            <div className="mb-4">
-                <h3 className="text-2xl font-bold mb-2">Adicionar Notícia</h3>
-                <input
-                    type="text"
-                    placeholder="Título"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Imagem URL"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Link"
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <button onClick={addNews} className="bg-blue-500 text-white p-2">Adicionar Notícia</button>
-            </div>
-            <div className="mb-4">
-                <h3 className="text-2xl font-bold mb-2">Adicionar Serviço</h3>
-                <input
-                    type="text"
-                    placeholder="Nome do Serviço"
-                    value={serviceName}
-                    onChange={(e) => setServiceName(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Descrição do Serviço"
-                    value={serviceDescription}
-                    onChange={(e) => setServiceDescription(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <button onClick={addService} className="bg-blue-500 text-white p-2">Adicionar Serviço</button>
-            </div>
-            <div className="mb-4">
-                <h3 className="text-2xl font-bold mb-2">Adicionar Membro</h3>
-                <input
-                    type="text"
-                    placeholder="Nome do Membro"
-                    value={memberName}
-                    onChange={(e) => setMemberName(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Função do Membro"
-                    value={memberRole}
-                    onChange={(e) => setMemberRole(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <button onClick={addMember} className="bg-blue-500 text-white p-2">Adicionar Membro</button>
-            </div>
-            <div className="mb-4">
-                <h3 className="text-2xl font-bold mb-2">Adicionar Configuração</h3>
-                <input
-                    type="text"
-                    placeholder="Chave"
-                    value={settingKey}
-                    onChange={(e) => setSettingKey(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Valor"
-                    value={settingValue}
-                    onChange={(e) => setSettingValue(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <button onClick={addSetting} className="bg-blue-500 text-white p-2">Adicionar Configuração</button>
-            </div>
-            <div>
-                <h3 className="text-2xl font-bold mb-4">Notícias</h3>
-                <ul>
-                    {news.map((item) => (
-                        <li key={item.id} className="mb-2">
-                            <h4 className="text-xl">{item.title}</h4>
-                            <img src={item.image} alt={item.title} className="w-32 h-32 object-cover" />
-                            <a href={item.link} className="text-blue-500">Leia mais</a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div>
-                <h3 className="text-2xl font-bold mb-4">Serviços</h3>
-                <ul>
-                    {services.map((item) => (
-                        <li key={item.id} className="mb-2">
-                            <h4 className="text-xl">{item.name}</h4>
-                            <p>{item.description}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div>
-                <h3 className="text-2xl font-bold mb-4">Membros</h3>
-                <ul>
-                    {members.map((item) => (
-                        <li key={item.id} className="mb-2">
-                            <h4 className="text-xl">{item.name}</h4>
-                            <p>{item.role}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div>
-                <h3 className="text-2xl font-bold mb-4">Configurações</h3>
-                <ul>
-                    {settings.map((item) => (
-                        <li key={item.id} className="mb-2">
-                            <h4 className="text-xl">{item.key}</h4>
-                            <p>{item.value}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+        <div className="flex h-screen bg-gray-100">
+            {/* Sidebar */}
+            <aside className="w-64 bg-blue-800 text-white p-5 flex flex-col">
+                <h1 className="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
+                <nav>
+                    <ul>
+                        <li className={`mb-4 p-2 rounded cursor-pointer ${activeTab === 'dashboard' ? 'bg-blue-600' : ''}`} onClick={() => setActiveTab('dashboard')}>Dashboard</li>
+                        <li className={`mb-4 p-2 rounded cursor-pointer ${activeTab === 'news' ? 'bg-blue-600' : ''}`} onClick={() => setActiveTab('news')}>Gerenciar Notícias</li>
+                        <li className={`mb-4 p-2 rounded cursor-pointer ${activeTab === 'services' ? 'bg-blue-600' : ''}`} onClick={() => setActiveTab('services')}>Gerenciar Serviços</li>
+                        <li className={`mb-4 p-2 rounded cursor-pointer ${activeTab === 'members' ? 'bg-blue-600' : ''}`} onClick={() => setActiveTab('members')}>Gerenciar Membros</li>
+                        <li className={`mb-4 p-2 rounded cursor-pointer ${activeTab === 'settings' ? 'bg-blue-600' : ''}`} onClick={() => setActiveTab('settings')}>Configurações</li>
+                    </ul>
+                </nav>
+                <button onClick={logout} className="mt-auto bg-red-500 p-2 rounded text-center">Sair</button>
+            </aside>
+
+            {/* Conteúdo Principal */}
+            <main className="flex-1 p-6">
+                {/* Dashboard */}
+                {activeTab === 'dashboard' && (
+                    <div>
+                        <h2 className="text-3xl font-bold mb-4">Dashboard</h2>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-white p-6 rounded-lg shadow">
+                                <h3 className="text-xl font-bold">Notícias Publicadas</h3>
+                                <p className="text-2xl">10</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-lg shadow">
+                                <h3 className="text-xl font-bold">Serviços Ativos</h3>
+                                <p className="text-2xl">5</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-lg shadow">
+                                <h3 className="text-xl font-bold">Membros Registrados</h3>
+                                <p className="text-2xl">8</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Gerenciar Notícias */}
+                {activeTab === 'news' && (
+                    <div>
+                        <h2 className="text-3xl font-bold mb-4">Gerenciar Notícias</h2>
+                        <input type="text" placeholder="Título" className="border p-2 w-full mb-2" />
+                        <input type="text" placeholder="Imagem URL" className="border p-2 w-full mb-2" />
+                        <input type="text" placeholder="Link" className="border p-2 w-full mb-2" />
+                        <button className="bg-blue-500 text-white p-2 rounded">Adicionar Notícia</button>
+                    </div>
+                )}
+
+                {/* Gerenciar Serviços */}
+                {activeTab === 'services' && (
+                    <div>
+                        <h2 className="text-3xl font-bold mb-4">Gerenciar Serviços</h2>
+                        <input type="text" placeholder="Nome do Serviço" className="border p-2 w-full mb-2" />
+                        <input type="text" placeholder="Descrição" className="border p-2 w-full mb-2" />
+                        <button className="bg-blue-500 text-white p-2 rounded">Adicionar Serviço</button>
+                    </div>
+                )}
+
+                {/* Gerenciar Membros */}
+                {activeTab === 'members' && (
+                    <div>
+                        <h2 className="text-3xl font-bold mb-4">Gerenciar Membros</h2>
+                        <input type="text" placeholder="Nome do Membro" className="border p-2 w-full mb-2" />
+                        <input type="text" placeholder="Cargo" className="border p-2 w-full mb-2" />
+                        <button className="bg-blue-500 text-white p-2 rounded">Adicionar Membro</button>
+                    </div>
+                )}
+
+                {/* Configurações */}
+                {activeTab === 'settings' && (
+                    <div>
+                        <h2 className="text-3xl font-bold mb-4">Configurações</h2>
+                        <input type="text" placeholder="Chave" className="border p-2 w-full mb-2" />
+                        <input type="text" placeholder="Valor" className="border p-2 w-full mb-2" />
+                        <button className="bg-blue-500 text-white p-2 rounded">Salvar Configuração</button>
+                    </div>
+                )}
+            </main>
         </div>
     );
 };
