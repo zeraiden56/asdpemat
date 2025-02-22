@@ -1,0 +1,266 @@
+/* 🔹 Variáveis de Cores */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --navbar-bg: #ffffff;
+  --navbar-border: #e5e5e5;
+  --footer-bg: #ffffff;
+  --card-bg: #F1F5F9;
+  --button-bg: #0057A3;
+  --button-text: #ffffff;
+  --highlight-color: #F04C2F;
+  --hover-color: #FBBF24;
+}
+
+/* 🔹 Reset e Estrutura */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 🔹 Navbar */
+.navbar {
+  background: var(--navbar-bg);
+  padding: 1rem 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--navbar-border);
+}
+
+.navbar a {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar a:hover {
+  color: var(--hover-color);
+}
+
+/* 🔹 Hero */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+/* 🔹 Imagem do Hero */
+.hero-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 🔹 Filtro Cinza Escuro */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 30, 30, 0.5);
+  /* 🔹 Agora aplicado corretamente */
+}
+
+/* 🔹 Texto no Hero */
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  color: #e0e0e0;
+  margin-top: 0.5rem;
+}
+
+/* 🔹 Seção de Notícias */
+.news {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 2rem;
+}
+
+.news h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.news-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.news-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* 🔹 Serviços */
+.services {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 2rem;
+}
+
+.services h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 90%;
+  max-width: 350px;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.service-card span {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* 🔹 Botões (Agora são Azuis) */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.button {
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background: var(--hover-color);
+  color: var(--background-color);
+}
+
+/* 🔹 Ícones Sociais */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.social-icons a {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  transition: color 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+  color: var(--hover-color);
+}
+
+/* 🔹 Footer */
+.footer {
+  background: var(--footer-bg);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* 🔹 Responsividade */
+@media (max-width: 768px) {
+  .hero {
+    height: 400px;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+
+  .services-grid,
+  .news-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
