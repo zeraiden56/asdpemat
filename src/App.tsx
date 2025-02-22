@@ -9,7 +9,7 @@ import FAQ from './pages/FAQ';
 import Ajuda from './pages/Ajuda';
 import Membro from './pages/Membro';
 import Admin from './pages/Admin'; // Ensure this path is correct and the file exists
-import Login from './Login';
+import Login from './pages/Login';
 import Layout from './components/Layout'; // Certifique-se de que o caminho está correto
 
 function App() {
