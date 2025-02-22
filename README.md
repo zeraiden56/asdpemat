@@ -43,7 +43,11 @@ Este projeto foi desenvolvido utilizando **React** no frontend e **Node.js** com
 
 1️⃣ **Clone o repositório:**
 ```sh
+<<<<<<< HEAD
 git clone https://github.com/seu-usuario/asdpemat.git
+=======
+git clone https://github.com/zeraiden56/asdpemat.git
+>>>>>>> 301d8adf7afcc73ee0206e9e23ea0b765e523b9a
 cd asdpemat
 ```
 
