@@ -1,50 +1,120 @@
-# React + TypeScript + Vite
+# 🌟 ASDPEMAT - Associação dos Servidores da Defensoria Pública do Estado de Mato Grosso
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bem-vindo ao repositório do site da **ASDPEMAT**! 🚀
+Este projeto foi desenvolvido utilizando **React** no frontend e **Node.js** com **PostgreSQL** no backend.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📂 Estrutura do Projeto
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+/C:/Users/Arthur/Documents/Programação/site associação/asdpemat/
+├── src/
+│   ├── pages/
+│   │   ├── Home.tsx
+│   │   ├── QuemSomos.tsx
+│   │   ├── Servicos.tsx
+│   │   ├── Presidencia.tsx
+│   │   ├── Ferramentas.tsx
+│   │   ├── FAQ.tsx
+│   │   ├── Ajuda.tsx
+│   │   ├── Membro.tsx
+│   │   ├── Admin.tsx
+│   │   ├── Login.tsx
+│   ├── components/
+│   │   ├── Layout.tsx
+│   ├── App.tsx
+│   ├── App.css
+│   ├── index.tsx
+├── server.cjs
+├── package.json
+├── vite.config.ts
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## ⚙️ Configuração do Ambiente
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### 📌 Pré-requisitos
+- [Node.js](https://nodejs.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### 📥 Instalação
+
+1️⃣ **Clone o repositório:**
+```sh
+git clone https://github.com/seu-usuario/asdpemat.git
+cd asdpemat
 ```
+
+2️⃣ **Instale as dependências:**
+```sh
+npm install
+```
+
+3️⃣ **Configure o banco de dados PostgreSQL:**
+- Crie um banco de dados PostgreSQL.
+- Atualize as credenciais de conexão no arquivo `server.cjs`.
+
+4️⃣ **Inicialize o servidor:**
+```sh
+node server.cjs
+```
+
+5️⃣ **Inicialize o frontend:**
+```sh
+npm run dev
+```
+
+---
+
+## 🚀 Uso
+
+### 🔑 Login
+- **Usuário padrão:** `admin`
+- **Senha padrão:** `admin`
+
+> ⚠️ **Atenção:** Recomenda-se alterar as credenciais padrão para garantir a segurança do sistema.
+
+### 🔗 Rotas
+
+| Rota | Descrição |
+|------|-----------|
+| `/api` | Rota de login |
+| `/api/news` | Rotas para gerenciar notícias |
+| `/api/services` | Rotas para gerenciar serviços |
+| `/api/members` | Rotas para gerenciar membros |
+| `/api/settings` | Rotas para gerenciar configurações |
+| `/api/export` | Rota para exportar o banco de dados |
+
+---
+
+## 🤝 Contribuição
+
+Quer contribuir com o projeto? Siga os passos abaixo:
+
+1. Faça um **fork** do projeto.
+2. Crie uma **branch** para sua feature:
+   ```sh
+   git checkout -b feature/nova-feature
+   ```
+3. Commit suas mudanças:
+   ```sh
+   git commit -m 'Adiciona nova feature'
+   ```
+4. Envie para o repositório remoto:
+   ```sh
+   git push origin feature/nova-feature
+   ```
+5. Abra um **Pull Request** e aguarde a revisão. 🚀
+
+---
+
+## 📜 Licença
+
+Este projeto está licenciado sob a licença **MIT**. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
+
+---
+
+💡 *Mantenha-se atualizado e contribua com melhorias!* 😃
+
