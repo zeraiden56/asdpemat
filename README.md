@@ -36,36 +36,47 @@ Este projeto foi desenvolvido utilizando **React** no frontend e **Node.js** com
 ## ⚙️ Configuração do Ambiente
 
 ### 📌 Pré-requisitos
+
 - [Node.js](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### 📥 Instalação
 
 1️⃣ **Clone o repositório:**
+
+```sh
 ```sh
 <<<<<<< HEAD
-git clone https://github.com/seu-usuario/asdpemat.git
+git clone https://github.com/zeraiden56/asdpemat.git
 =======
 git clone https://github.com/zeraiden56/asdpemat.git
 >>>>>>> 301d8adf7afcc73ee0206e9e23ea0b765e523b9a
 cd asdpemat
 ```
 
+```
+
+```
+
 2️⃣ **Instale as dependências:**
+
 ```sh
 npm install
 ```
 
 3️⃣ **Configure o banco de dados PostgreSQL:**
+
 - Crie um banco de dados PostgreSQL.
 - Atualize as credenciais de conexão no arquivo `server.cjs`.
 
 4️⃣ **Inicialize o servidor:**
+
 ```sh
 node server.cjs
 ```
 
 5️⃣ **Inicialize o frontend:**
+
 ```sh
 npm run dev
 ```
@@ -75,6 +86,7 @@ npm run dev
 ## 🚀 Uso
 
 ### 🔑 Login
+
 - **Usuário padrão:** `admin`
 - **Senha padrão:** `admin`
 
@@ -82,14 +94,14 @@ npm run dev
 
 ### 🔗 Rotas
 
-| Rota | Descrição |
-|------|-----------|
-| `/api` | Rota de login |
-| `/api/news` | Rotas para gerenciar notícias |
-| `/api/services` | Rotas para gerenciar serviços |
-| `/api/members` | Rotas para gerenciar membros |
+| Rota              | Descrição                          |
+| ----------------- | ------------------------------------ |
+| `/api`          | Rota de login                        |
+| `/api/news`     | Rotas para gerenciar notícias       |
+| `/api/services` | Rotas para gerenciar serviços       |
+| `/api/members`  | Rotas para gerenciar membros         |
 | `/api/settings` | Rotas para gerenciar configurações |
-| `/api/export` | Rota para exportar o banco de dados |
+| `/api/export`   | Rota para exportar o banco de dados  |
 
 ---
 
@@ -121,4 +133,3 @@ Este projeto está licenciado sob a licença **MIT**. Veja o arquivo [LICENSE](.
 ---
 
 💡 *Mantenha-se atualizado e contribua com melhorias!* 😃
-
