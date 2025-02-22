@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = ({ setToken }) => {
-    const [username, setUsername] = useState('admin');
-    const [password, setPassword] = useState('admin');
+interface LoginProps {
+    setToken: (token: string) => void;
+}
+
+const Login: React.FC<LoginProps> = ({ setToken }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const login = () => {
         axios.post('/api/login', { username, password }).then((response) => {
             setToken(response.data.token);
-        }).catch((error) => {
+        }).catch(() => {
             alert('Invalid credentials');
         });
     };

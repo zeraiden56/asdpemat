@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from './Login'; // Corrigir o caminho de importação
 
 const Admin = () => {
     const [token, setToken] = useState(localStorage.getItem('token'));
-    const [news, setNews] = useState([]);
-    const [services, setServices] = useState([]);
-    const [members, setMembers] = useState([]);
-    const [settings, setSettings] = useState([]);
+    const [news, setNews] = useState<any[]>([]);
+    const [services, setServices] = useState<any[]>([]);
+    const [members, setMembers] = useState<any[]>([]);
+    const [settings, setSettings] = useState<{ id: number; key: string; value: string }[]>([]);
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
     const [link, setLink] = useState('');
@@ -69,7 +69,7 @@ const Admin = () => {
     };
 
     if (!token) {
-        return <Login setToken={(token) => {
+        return <Login setToken={(token: string) => {
             localStorage.setItem('token', token);
             setToken(token);
         }} />;

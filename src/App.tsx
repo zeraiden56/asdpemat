@@ -12,6 +12,10 @@ import Admin from './pages/Admin'; // Ensure this path is correct and the file e
 import Login from './pages/Login';
 import Layout from './components/Layout'; // Certifique-se de que o caminho está correto
 
+function setToken(token: string) {
+  localStorage.setItem('token', token);
+}
+
 function App() {
   return (
     <Router>
@@ -27,7 +31,7 @@ function App() {
           <Route path="/ajuda" element={<Ajuda />} />
           <Route path="/membro" element={<Membro />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login setToken={setToken} />} />
         </Routes>
       </Layout>
     </Router>
