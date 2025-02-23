@@ -1,163 +1,118 @@
-const express = require('express');
-const { Pool } = require('pg');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const cors = require("cors");
+const { Pool } = require("pg");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
+const SECRET_KEY = process.env.SECRET_KEY || "secreto";
 
-// Configurar a conexão com PostgreSQL
 const pool = new Pool({
-    user: 'admin',
-    host: '127.0.0.1',
-    database: 'asdpemat',
-    password: 'admin',
+    user: "admin",
+    host: "127.0.0.1",
+    database: "asdpemat",
+    password: "admin",
     port: 5432,
 });
 
-// Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
-// Criar tabelas necessárias
-pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS news (
-        id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        image TEXT,
-        link TEXT
-    );
-    CREATE TABLE IF NOT EXISTS services (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        description TEXT
-    );
-    CREATE TABLE IF NOT EXISTS members (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        role TEXT
-    );
-    CREATE TABLE IF NOT EXISTS settings (
-        id SERIAL PRIMARY KEY,
-        key TEXT NOT NULL,
-        value TEXT
-    );
-`, (err) => {
-    if (err) {
-        console.error('Erro ao criar tabelas:', err);
-    } else {
-        console.log('Tabelas criadas com sucesso');
-
-        // Criar usuário administrador padrão, se não existir
-        const adminPassword = bcrypt.hashSync('admin', 8);
-        pool.query('SELECT * FROM users WHERE username = $1', ['admin'], (err, result) => {
-            if (err) {
-                console.error('Erro ao verificar usuário administrador:', err);
-            } else if (result.rows.length === 0) {
-                pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', ['admin', adminPassword], (err) => {
-                    if (err) {
-                        console.error('Erro ao criar usuário administrador:', err);
-                    } else {
-                        console.log('Usuário administrador criado com sucesso');
-                    }
-                });
-            }
-        });
-    }
+// Configuração do multer para upload de imagens
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = "uploads/";
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    },
 });
+const upload = multer({ storage });
 
 // Middleware de autenticação
 const authMiddleware = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) {
-        return res.status(401).send({ error: 'Token não fornecido' });
-    }
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) return res.status(401).json({ error: "Acesso negado." });
+
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         req.user = decoded;
         next();
     } catch (e) {
-        res.status(401).send({ error: 'Token inválido' });
+        res.status(401).json({ error: "Token inválido" });
     }
 };
 
-// Rota de login
-app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-
+// 🔓 Rota para obter seções dinâmicas do site
+app.get("/api/sections", async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-
-        if (result.rows.length === 0) {
-            return res.status(400).send('Usuário não encontrado');
-        }
-
-        const user = result.rows[0];
-
-        // Comparar a senha informada com o hash no banco
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(400).send('Senha incorreta');
-        }
-
-        // Gerar token JWT para autenticação
-        const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
-
-        res.send({ token });
+        const result = await pool.query("SELECT * FROM sections ORDER BY id DESC");
+        res.json(result.rows);
     } catch (err) {
-        console.error('Erro no login:', err);
-        res.status(500).send('Erro no servidor');
+        console.error("Erro ao buscar seções:", err);
+        res.status(500).send("Erro ao buscar seções");
     }
 });
 
-// Função genérica para obter dados
-const getData = (table) => async (req, res) => {
+// 🔐 Criar ou atualizar conteúdo de uma seção
+app.post("/api/sections", authMiddleware, async (req, res) => {
+    const { title, content } = req.body;
     try {
-        const result = await pool.query(`SELECT * FROM ${table}`);
-        res.json(result.rows);
+        const existing = await pool.query("SELECT * FROM sections WHERE title = $1", [title]);
+        if (existing.rowCount > 0) {
+            await pool.query("UPDATE sections SET content = $1 WHERE title = $2", [content, title]);
+        } else {
+            await pool.query("INSERT INTO sections (title, content) VALUES ($1, $2)", [title, content]);
+        }
+        res.json({ message: "Seção salva com sucesso!" });
     } catch (err) {
-        console.error(`Erro ao buscar ${table}:`, err);
-        res.status(500).send(`Erro ao buscar ${table}`);
+        console.error("Erro ao salvar seção:", err);
+        res.status(500).send("Erro ao salvar seção");
     }
-};
+});
 
-// Função genérica para inserir dados
-const insertData = (table, columns) => async (req, res) => {
+// 🔐 Excluir uma seção
+app.delete("/api/sections/:id", authMiddleware, async (req, res) => {
+    const { id } = req.params;
     try {
-        const values = columns.map(col => req.body[col]);
-        const result = await pool.query(
-            `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${columns.map((_, i) => `$${i + 1}`).join(', ')}) RETURNING *`,
-            values
-        );
-        res.json(result.rows[0]);
+        await pool.query("DELETE FROM sections WHERE id = $1", [id]);
+        res.json({ message: "Seção removida com sucesso!" });
     } catch (err) {
-        console.error(`Erro ao adicionar em ${table}:`, err);
-        res.status(500).send(`Erro ao adicionar em ${table}`);
+        console.error("Erro ao excluir seção:", err);
+        res.status(500).send("Erro ao excluir seção");
     }
-};
+});
 
-// Aplicando as funções genéricas para as rotas
-app.get('/api/news', authMiddleware, getData('news'));
-app.post('/api/news', authMiddleware, insertData('news', ['title', 'image', 'link']));
+// 🔐 Login de usuário
+app.post("/api/login", async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+        if (result.rows.length === 0) return res.status(400).send("Usuário não encontrado");
 
-app.get('/api/services', authMiddleware, getData('services'));
-app.post('/api/services', authMiddleware, insertData('services', ['name', 'description']));
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).send("Senha incorreta");
 
-app.get('/api/members', authMiddleware, getData('members'));
-app.post('/api/members', authMiddleware, insertData('members', ['name', 'role']));
+        const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "1h" });
+        res.json({ token });
+    } catch (err) {
+        console.error("Erro no login:", err);
+        res.status(500).send("Erro no servidor");
+    }
+});
 
-app.get('/api/settings', authMiddleware, getData('settings'));
-app.post('/api/settings', authMiddleware, insertData('settings', ['key', 'value']));
-
-// Iniciar servidor
+// 🔓 Servidor iniciado
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });

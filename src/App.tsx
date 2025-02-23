@@ -1,5 +1,4 @@
-import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import QuemSomos from './pages/QuemSomos';
 import Servicos from './pages/Servicos';
@@ -8,20 +7,17 @@ import Ferramentas from './pages/Ferramentas';
 import FAQ from './pages/FAQ';
 import Ajuda from './pages/Ajuda';
 import Membro from './pages/Membro';
-import Admin from './pages/Admin'; // Ensure this path is correct and the file exists
 import Login from './pages/Login';
-import Layout from './components/Layout'; // Certifique-se de que o caminho está correto
-
-function setToken(token: string) {
-  localStorage.setItem('token', token);
-}
+import Admin from './pages/Admin';
+import PrivateRoute from './components/PrivateRoute';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Router>
-      {/* Layout aplica-se a TODAS as páginas */}
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* 🔹 Aplicando o Layout para todas as páginas públicas */}
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/quem-somos" element={<QuemSomos />} />
           <Route path="/servicos" element={<Servicos />} />
@@ -30,10 +26,16 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/ajuda" element={<Ajuda />} />
           <Route path="/membro" element={<Membro />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/login" element={<Login setToken={setToken} />} />
-        </Routes>
-      </Layout>
+          <Route path="/login" element={<Login setToken={(token: string) => { localStorage.setItem('token', token); }} />} />
+        </Route>
+
+        {/* 🔒 Rotas protegidas dentro do Layout */}
+        <Route element={<PrivateRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+        </Route>
+      </Routes>
     </Router>
   );
 }
