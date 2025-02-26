@@ -9,12 +9,12 @@ const Presidencia = () => {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const response = await axios.get(`${apiURL}/sections?title=Presidência`);
+                const response = await axios.get(`${apiURL}/sections?title=Quem Somos`);
                 if (response.data.length > 0) {
                     setContent(response.data[0].content);
                 }
             } catch (error) {
-                console.error("Erro ao buscar conteúdo da Presidência:", error);
+                console.error("Erro ao buscar conteúdo:", error);
             }
         };
 
@@ -22,9 +22,9 @@ const Presidencia = () => {
     }, []);
 
     return (
-        <div className="max-w-7xl mx-auto py-16 px-6 text-center text-gray-700">
-            <h1 className="text-4xl font-bold text-gray-900 mb-12">Presidência</h1>
-            <div dangerouslySetInnerHTML={{ __html: content }} className="text-lg text-gray-800"></div>
+        <div className="p-4">
+            <h2 className="text-3xl font-bold mb-4">Presidência</h2>
+            <div dangerouslySetInnerHTML={{ __html: content }} className="text-lg"></div>
         </div>
     );
 };

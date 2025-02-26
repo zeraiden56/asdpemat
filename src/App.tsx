@@ -1,16 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import QuemSomos from './pages/QuemSomos';
-import Servicos from './pages/Servicos';
-import Presidencia from './pages/Presidencia';
-import Ferramentas from './pages/Ferramentas';
-import FAQ from './pages/FAQ';
-import Ajuda from './pages/Ajuda';
-import Membro from './pages/Membro';
-import Login from './pages/Login';
-import Admin from './pages/Admin';
-import PrivateRoute from './components/PrivateRoute';
-import Layout from './components/Layout';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import QuemSomos from "./pages/QuemSomos";
+import Servicos from "./pages/Servicos";
+import Presidencia from "./pages/Presidencia";
+import Ferramentas from "./pages/Ferramentas";
+import FAQ from "./pages/FAQ";
+import Ajuda from "./pages/Ajuda";
+import AssocieSe from "./pages/AssocieSe";
+import Login from "./pages/Login";
+import Admin from "./pages/Admin";
+import PrivateRoute from "./components/PrivateRoute";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -25,8 +25,8 @@ function App() {
           <Route path="/ferramentas" element={<Ferramentas />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/ajuda" element={<Ajuda />} />
-          <Route path="/membro" element={<Membro />} />
-          <Route path="/login" element={<Login setToken={(token: string) => { localStorage.setItem('token', token); }} />} />
+          <Route path="/associe-se" element={<AssocieSe />} />
+          <Route path="/login" element={<Login />} />
         </Route>
 
         {/* 🔒 Rotas protegidas dentro do Layout */}

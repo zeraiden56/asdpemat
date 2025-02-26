@@ -1,14 +1,30 @@
-import React from 'react';
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+const apiURL = "http://localhost:5000/api";
 
 const Servicos = () => {
+    const [content, setContent] = useState<string>("");
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const response = await axios.get(`${apiURL}/sections?title=Quem Somos`);
+                if (response.data.length > 0) {
+                    setContent(response.data[0].content);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar conteúdo:", error);
+            }
+        };
+
+        fetchContent();
+    }, []);
+
     return (
         <div className="p-4">
             <h2 className="text-3xl font-bold mb-4">Serviços</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gray-700 h-48"></div>
-                <div className="bg-gray-700 h-48"></div>
-                <div className="bg-gray-700 h-48"></div>
-            </div>
+            <div dangerouslySetInnerHTML={{ __html: content }} className="text-lg"></div>
         </div>
     );
 };

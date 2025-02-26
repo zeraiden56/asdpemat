@@ -24,7 +24,7 @@ const Layout = () => {
                                     { name: "Ferramentas", path: "/ferramentas" },
                                     { name: "FAQ", path: "/faq" },
                                     { name: "Ajuda", path: "/ajuda" },
-                                    { name: "Membro", path: "/membro" }
+                                    { name: "Associe-se", path: "/Associe-se" }
                                 ].map((item) => (
                                     <li key={item.path} className="relative group">
                                         <Link
